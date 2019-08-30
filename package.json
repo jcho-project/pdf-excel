@@ -1,0 +1,23 @@
+{
+  "name": "pdf-excel",
+  "version": "1.0.0",
+  "description": "PDF Parser to Excel Formatter",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcho-project/pdf-excel.git"
+  },
+  "author": "June Hyok Cho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcho-project/pdf-excel/issues"
+  },
+  "homepage": "https://github.com/jcho-project/pdf-excel#readme",
+  "dependencies": {
+    "file-system": "^2.2.2",
+    "pdfreader": "^1.0.4"
+  }
+}
