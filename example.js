@@ -3,16 +3,19 @@ const fs = require("file-system"),
 
 fs.readFile("./test.pdf", (err, pdfBuffer) => {
   function readPDFPages(buffer, reader = (new pr.PdfReader())) {
+    let pages = [];
     console.log(pages);
     return new Promise((resolve, reject) => {
-      let pages = [];
       reader.parseBuffer(pdfBuffer, (err, item) => {
         if (err) {
           reject(err);
+
         } else if (!item) {
           resolve(pages);
+
         } else if (item.page) {
           pages.push({});
+
         } else if (item.text) {
           let row = pages[pages.length - 1][item.y] || [];
           row.push(item.text);
