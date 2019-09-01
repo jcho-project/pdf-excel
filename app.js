@@ -1,7 +1,7 @@
 const fs = require("file-system"),
   pr = require("pdfreader");
 
-let rows = [];
+let rows = {};
 
 fs.readFile("./test.pdf", (err, pdfBuffer) => {
   new pr.PdfReader().parseBuffer(pdfBuffer, (err, item) => {
@@ -27,7 +27,14 @@ fs.readFile("./test.pdf", (err, pdfBuffer) => {
 });
 
 function printRows() {
-  Object.keys(rows).sort((y1, y2) => parseFloat(y1) - parseFloat(y2));
+  // Object.keys(rows).sort((y1, y2) => parseFloat(y1) - parseFloat(y2));
   // .forEach(y => console.log((rows[y] || []).join(" : ")));
-  console.log(Object.keys(rows));
+  // console.log(Object.keys(rows));
+
+  Object.keys(rows).forEach((y) => {
+    console.log(typeof(y));
+    parseInt(y);
+    console.log(typeof(y));
+  });
+
 };
