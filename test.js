@@ -66,10 +66,12 @@ function parseToddPDF(pages) {
 
 }
 
-module.exports = async function parse(buf, reader) {
+readPDFPages("./sample/test.pdf").then(console.log("hey"));
 
-  const data = await readPDFPages(buf, reader);
-  const parsedData = parseToddPDF(data);
-  return parsedData;
+// module.exports = async function parse(buf, reader) {
 
-}
+//   const data = await readPDFPages(buf, reader);
+//   const parsedData = parseToddPDF(data);
+//   return parsedData;
+
+// }
