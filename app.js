@@ -7,22 +7,23 @@ if (typeof XLSX == 'undefined') XLSX = require('xlsx');
 // FILE READER
 // ------------------------------
 
-// const testFolder = "./sample/"
+const testFolder = "./sample/"
 
-// fs.readdir(testFolder, (err, files) => {
-//   let readFiles = [];
+fs.readdir(testFolder, (err, files) => {
+  let readFiles = [];
 
-//   files.forEach(file => {
-//     return readFiles.push(file)
-//   });
+  files.forEach(file => {
+    readFiles.push(file)
+  });
 
-//   console.log(readFiles);
-// });
+  // console.log(readFiles);
 
-
-fs.readFile("./sample/2395544244_CD.pdf", (err, pdfBuffer) => {
-  parse(pdfBuffer, new pr.PdfReader);
-  // checkPdf(pdfBuffer, new pr.PdfReader);
+  for (let i = 0; i < readFiles.length; i++) {
+    fs.readFile(testFolder + readFiles[i], (err, pdfBuffer) => {
+      excel(pdfBuffer, new pr.PdfReader);
+      // checkPdf(pdfBuffer, new pr.PdfReader);
+    });
+  }
 });
 
 // ------------------------------
@@ -74,11 +75,11 @@ function parseData(pages) {
     "ITEM_NO(M)": { page: 3, row: 23.638, index: 0 },
     "QUANTITY_SHIPPED(M)": { page: undefined },
     "UNIT_PRICE(M)": { page: undefined },
-    "VAT_AMOUNT": { page: 2, row: 28.153, index: 2 },
+    "VAT_AMOUNT": { page: 0, row: 31.542, index: 5 },
     "IMPORT_DECLARATION_NO": { page: 0, row: 26.473, index: 0 },
     "IMPORT_DECLARATION_DATE(YYYYMMDD)": { page: 0, row: 2.76, index: 2 },
-    "CC_AMOUNT": { page: 2, row: 16.874, index: 1 },
-    "DUTY_AMOUNT": { page: 2, row: 21.943, index: 2 },
+    "CC_AMOUNT": { page: 3, row: 26.473, index: 3 },
+    "DUTY_AMOUNT": { page: 0, row: 29.847, index: 5 },
     "SHIPMENT_PORT_CODE": { page: undefined },
     "PACKING_QTY": { page: undefined },
     "PACKING_UNIT_CODE": { page: undefined },
@@ -110,7 +111,6 @@ function parseData(pages) {
 
         data[key] = val;
       }
-
     });
 
   // DATA CLEANUP
@@ -125,11 +125,11 @@ function parseData(pages) {
 // RESULT & EXCEL OUTPUT
 // ------------------------------
 
-async function parse(buf, reader) {
+async function excel(buf, reader) {
   try {
-    const data = await readPDFPages(buf, reader);
-
     const newData = [];
+
+    const data = await readPDFPages(buf, reader);
 
     newData.push(parseData(data));
 
@@ -140,9 +140,15 @@ async function parse(buf, reader) {
 
     const ws = XLSX.utils.json_to_sheet(newData);
 
-    XLSX.utils.book_append_sheet(wb, ws, ws_name);
-
-    XLSX.writeFile(wb, "testExcel.xlsx");
+    fs.exists("./testExcel.xlsx", (exists) => {
+      if (exists) {
+        let current = XLSX.utils.sheet_to_json(ws);
+        console.log(current);
+      } else if (!exists) {
+        XLSX.utils.book_append_sheet(wb, ws, ws_name);
+        XLSX.writeFile(wb, "testExcel.xlsx");
+      }
+    })
 
     return newData;
 
