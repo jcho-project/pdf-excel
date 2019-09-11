@@ -1,6 +1,7 @@
 const
   fs = require("file-system"),
   pr = require("pdfreader"),
+  util = require("util"),
   parseData = require("./parser"),
   readPDFPages = require("./bufferer");
 
@@ -10,56 +11,10 @@ if (typeof XLSX == 'undefined') XLSX = require('xlsx');
 // FILE READER
 // ------------------------------
 
-const testFolder = "./sample/"
-
-// fs.readdirAsync = function (dirname) {
-//   return new Promise((resolve, reject) => {
-//     fs.readdir(dirname, (err, filenames) => {
-//       if (err)
-//         reject(err);
-
-//       else
-//         resolve(filenames);
-//     });
-//   });
-// };
-
-// fs.readdirAsync(testFolder)
-//   .then(files => {
-
-//     files.forEach((file) => {
-//       fs.readFile(testFolder + file, (err, pdfBuffer) => {
-//         let consolidated = [];
-
-//         resultData(pdfBuffer, new pr.PdfReader).then(x => {
-//           consolidated.push(x[0]);
-//           fs.appendFile("./fishes.js", JSON.stringify(consolidated), (err) => {
-//             if (err) {
-//               console.log(err);
-//             }
-//             console.log("File was Appended!");
-//           });
-//         });
-//       });
-//     });
-//   });
-
+const testFolder = "./sample/";
 
 fs.readdir(testFolder, (err, files) => {
-  let readFiles = [];
-
-  files.forEach(file => readFiles.push(file));
-
-  fs.readFile(testFolder + readFiles[0], (err, pdfBuffer) => {
-    resultData(pdfBuffer, new pr.PdfReader).then(data => excel(data));
-  });
-
-  // for (let i = 0; i < readFiles.length; i++) {
-  //   fs.readFile(testFolder + readFiles[i], (err, pdfBuffer) => {
-  //     resultData(pdfBuffer, new pr.PdfReader);
-  //     // checkPdf(pdfBuffer, new pr.PdfReader);
-  //   });
-  // }
+  console.log(consolidate(files));
 });
 
 // ------------------------------
@@ -74,10 +29,31 @@ async function resultData(buf, reader) {
 
     newData.push(parseData(data));
 
-    return newData;
-
   } catch (err) {
     console.error(err);
+  }
+}
+
+// ------------------------------
+// CONSOLIDATE DATA
+// ------------------------------
+
+async function consolidate(files) {
+  try {
+    let x = [];
+
+    for (let i = 0; i < files.length; i++) {
+      fs.readFile(testFolder + files[i], (err, pdfBuffer) => {
+        let y = resultData(pdfBuffer, new pr.PdfReader);
+        x.push(y[0])
+        console.log(x.length);
+
+        // checkPdf(pdfBuffer, new pr.PdfReader);
+      });
+    }
+
+  } catch (err) {
+    console.log(err);
   }
 }
 
