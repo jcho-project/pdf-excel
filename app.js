@@ -13,9 +13,10 @@ if (typeof XLSX == 'undefined') XLSX = require('xlsx');
 
 const testFolder = "./sample/";
 const readFile = util.promisify(fs.readFile);
+const readdir = util.promisify(fs.readdir);
 
-fs.readdir(testFolder, (err, files) => {
-  consolidate(files).then(y => console.log(x));
+readdir(testFolder).then(x => {
+  console.log(consolidate(x))
 });
 
 // ------------------------------
@@ -30,6 +31,8 @@ async function resultData(buf, reader) {
 
     newData.push(parseData(data));
 
+    return newData;
+
   } catch (err) {
     console.error(err);
   }
@@ -38,22 +41,22 @@ async function resultData(buf, reader) {
 // ------------------------------
 // CONSOLIDATE DATA
 // ------------------------------
+
 async function consolidate(files) {
   try {
-    let x = [];
+    const promises = [];
 
     for (let i = 0; i < files.length; i++) {
       readFile(testFolder + files[i]).then((z) => {
-        resultData(z, new pr.PdfReader).then(y => x.push(y));
-
-        // let y = resultData(pdfBuffer, new pr.PdfReader);
-
-        // x.push(y)
-
+        resultData(z, new pr.PdfReader).then(y => {
+          promises.push(y[0])
+          console.log(promises);
+        })
         // checkPdf(pdfBuffer, new pr.PdfReader);
       });
     }
 
+    return promises;
   } catch (err) {
     console.log(err);
   }
