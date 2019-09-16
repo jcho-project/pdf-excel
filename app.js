@@ -15,8 +15,9 @@ const testFolder = "./sample/";
 const readFile = util.promisify(fs.readFile);
 const readdir = util.promisify(fs.readdir);
 
-readdir(testFolder).then(x => {
-  console.log(consolidate(x))
+readdir(testFolder).then(list => {
+  console.log(consolidate(list));
+  // consolidate(list);
 });
 
 // ------------------------------
@@ -44,19 +45,23 @@ async function resultData(buf, reader) {
 
 async function consolidate(files) {
   try {
-    const promises = [];
+    let results = [];
 
-    for (let i = 0; i < files.length; i++) {
-      readFile(testFolder + files[i]).then((z) => {
-        resultData(z, new pr.PdfReader).then(y => {
-          promises.push(y[0])
-          console.log(promises);
-        })
-        // checkPdf(pdfBuffer, new pr.PdfReader);
-      });
-    }
+    return files.forEach(file => {
+      readFile(testFolder + file).then((buffer) => {
+        let promises = resultData(buffer, new pr.PdfReader);
 
-    return promises;
+        results.push(promises);
+      })
+    })
+
+    // for (let i = 0; i < files.length; i++) {
+    //   readFile(testFolder + files[i]).then((file) => {
+    //     console.log(resultData(file, new pr.PdfReader))
+    //     // checkPdf(pdfBuffer, new pr.PdfReader);
+    //   });
+    // }
+
   } catch (err) {
     console.log(err);
   }
@@ -83,16 +88,16 @@ function excel(data) {
 // TEST
 // ------------------------------
 
-async function checkPdf(buf, reader) {
-  try {
-    const data = await readPDFPages(buf, reader);
+// async function checkPdf(buf, reader) {
+//   try {
+//     const data = await readPDFPages(buf, reader);
 
-    console.log(data);
+//     console.log(data);
 
-    return data;
+//     return data;
 
-  } catch (err) {
-    console.log(err);
-  }
-}
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
 
