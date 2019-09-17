@@ -3,22 +3,21 @@ const
   pr = require("pdfreader"),
   util = require("util"),
   parseData = require("./parser"),
-  readPDFPages = require("./bufferer");
-
-if (typeof XLSX == 'undefined') XLSX = require('xlsx');
+  readPDFPages = require("./bufferer"),
+  XLSX = require('xlsx');
 
 // ------------------------------
 // FILE READER
 // ------------------------------
 
 const testFolder = "./sample/";
-const readFile = util.promisify(fs.readFile);
-const readdir = util.promisify(fs.readdir);
 
-readdir(testFolder).then(list => {
-  console.log(consolidate(list));
-  // consolidate(list);
-});
+fs.readdir(testFolder, (err, list) => {
+  list.forEach(item => {
+    // consolidate(item)
+    console.log(consolidate(item))
+  })
+})
 
 // ------------------------------
 // RESULT DATA
@@ -43,28 +42,17 @@ async function resultData(buf, reader) {
 // CONSOLIDATE DATA
 // ------------------------------
 
-async function consolidate(files) {
-  try {
-    let results = [];
+function consolidate(file) {
+  const int = [];
 
-    return files.forEach(file => {
-      readFile(testFolder + file).then((buffer) => {
-        let promises = resultData(buffer, new pr.PdfReader);
+  fs.readFile(testFolder + file, (err, buffer) => {
 
-        results.push(promises);
-      })
-    })
+    int.push(resultData(buffer, new pr.PdfReader));
 
-    // for (let i = 0; i < files.length; i++) {
-    //   readFile(testFolder + files[i]).then((file) => {
-    //     console.log(resultData(file, new pr.PdfReader))
-    //     // checkPdf(pdfBuffer, new pr.PdfReader);
-    //   });
-    // }
+    console.log(int);
 
-  } catch (err) {
-    console.log(err);
-  }
+    return Promise.all(int);
+  })
 }
 
 // ------------------------------
@@ -84,20 +72,4 @@ function excel(data) {
   XLSX.writeFile(wb, "testExcel.xlsx");
 }
 
-// ------------------------------
-// TEST
-// ------------------------------
-
-// async function checkPdf(buf, reader) {
-//   try {
-//     const data = await readPDFPages(buf, reader);
-
-//     console.log(data);
-
-//     return data;
-
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
 
