@@ -42,18 +42,18 @@ async function resultData(buf, reader) {
 // CONSOLIDATE DATA
 // ------------------------------
 
-function consolidate(file) {
-  const int = [];
+// function consolidate(file) {
+//   const int = [];
 
-  fs.readFile(testFolder + file, (err, buffer) => {
+//   fs.readFile(testFolder + file, (err, buffer) => {
 
-    int.push(resultData(buffer, new pr.PdfReader));
+//     int.push(resultData(buffer, new pr.PdfReader));
 
-    console.log(int);
+//     console.log(int);
 
-    return Promise.all(int);
-  })
-}
+//     return Promise.all(int);
+//   })
+// }
 
 // ------------------------------
 // DISPLAY EXCEL
