@@ -12,12 +12,12 @@ const
 
 const testFolder = "./sample/";
 
-fs.readdir(testFolder, (err, list) => {
-  list.forEach(item => {
-    consolidate(item).then(x => console.log(x))
-    // console.log(consolidate(item))
-  })
-})
+// fs.readdir(testFolder, (err, list) => {
+//   list.forEach(item => {
+//     consolidate(item).then(x => console.log(x))
+//     // console.log(consolidate(item))
+//   })
+// })
 
 // ------------------------------
 // RESULT DATA
@@ -42,19 +42,28 @@ async function resultData(buf, reader) {
 // CONSOLIDATE DATA
 // ------------------------------
 
-async function consolidate(file) {
-  const int = [];
+const int = [];
 
-  fs.readFile(testFolder + file, (err, buffer) => {
+function consolidate(file) {
+  return function runnable() {
+    fs.readFile(testFolder + file, (err, buffer) => {
 
-    int.push(resultData(buffer, new pr.PdfReader));
+      return resultData(buffer, new pr.PdfReader);
 
-    // console.log(int);
-
-  })
-
-  return Promise.all(int);
+      // console.log(int);
+    })
+  }
 }
+
+fs.readdir(testFolder, (err, list) => {
+  for (let i = 0; i < 4; i++) {
+    int.push(consolidate(list))
+  }
+})
+
+const values = int.map(value => value());
+
+console.log(values);
 
 // ------------------------------
 // DISPLAY EXCEL
