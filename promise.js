@@ -26,8 +26,8 @@ async function addData(input) {
 // promiseTest(testSubject).then(result => console.log("Resolved Promise : ", result));
 // addData(testSubject).then(result => console.log("Resolved Async : ", result));
 
+const newArray = [];
 async function consolidate() {
-  const newArray = [];
 
   const group = await addData(testSubject);
 
@@ -41,4 +41,5 @@ async function consolidate() {
 }
 
 addData(testSubject).then(x => console.log(x));
-consolidate().then(x => console.log(x));
+consolidate().then(console.log);
+
