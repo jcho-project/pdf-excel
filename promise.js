@@ -26,20 +26,25 @@ async function addData(input) {
 // promiseTest(testSubject).then(result => console.log("Resolved Promise : ", result));
 // addData(testSubject).then(result => console.log("Resolved Async : ", result));
 
-const newArray = [];
 async function consolidate() {
+  const newArray = [];
 
-  const group = await addData(testSubject);
+  // const group = await addData(testSubject);
 
-  // const newArray = group.map(item => item / 2);
+  // // const newArray = group.map(item => item / 2);
 
-  for (let i = 0; i < group.length; i++) {
-    newArray.push(group[i] / 2);
-  }
+  // for (let i = 0; i < group.length; i++) {
+  //   newArray.push(group[i] / 2);
+  // }
 
-  return newArray;
+  // return newArray;
+
+  newArray.push(promiseTest(testSubject));
+  newArray.push(addData(testSubject));
+
+  return Promise.all(newArray);
 }
 
-addData(testSubject).then(x => console.log(x));
+// addData(testSubject).then(x => console.log(x));
 consolidate().then(console.log);
 

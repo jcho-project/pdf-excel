@@ -18,6 +18,8 @@ const testFolder = "./sample/";
 //   })
 // })
 
+console.log(consolidate())
+
 // ------------------------------
 // RESULT DATA
 // ------------------------------
@@ -30,20 +32,22 @@ async function resultData(buf, reader) {
   newData.push(parseData(data));
 
   return newData;
-
 }
 
 // ------------------------------
 // CONSOLIDATE DATA
 // ------------------------------
 
-function consolidate(file) {
-  fs.readdir(testFolder, (err, list) => {
-    fs.readFile(testFolder + file, (err, buffer) => {
+function consolidate() {
+  const promisesArray = [];
 
-      resultData(buffer, new pr.PdfReader);
+  fs.readdir(testFolder, (err, list) => {
+    fs.readFile(testFolder + list[0], (err, buffer) => {
+
+      promisesArray.push(resultData(buffer, new pr.PdfReader));
     })
   })
+  return Promise.all(promisesArray);
 }
 
 // ------------------------------
