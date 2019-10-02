@@ -20,6 +20,7 @@ const testFolder = "./sample/";
 
 console.log(consolidate())
 
+
 // ------------------------------
 // RESULT DATA
 // ------------------------------
@@ -38,16 +39,20 @@ async function resultData(buf, reader) {
 // CONSOLIDATE DATA
 // ------------------------------
 
-function consolidate() {
+async function consolidate() {
   const promisesArray = [];
 
   fs.readdir(testFolder, (err, list) => {
     fs.readFile(testFolder + list[0], (err, buffer) => {
+      // console.log(resultData(buffer, new pr.PdfReader).then(console.log))
 
       promisesArray.push(resultData(buffer, new pr.PdfReader));
+
+      return promisesArray;
     })
   })
-  return Promise.all(promisesArray);
+
+  // return Promise.all(promisesArray);
 }
 
 // ------------------------------

@@ -42,9 +42,13 @@ async function consolidate() {
   newArray.push(promiseTest(testSubject));
   newArray.push(addData(testSubject));
 
+  console.log(newArray)
+
   return Promise.all(newArray);
 }
 
 // addData(testSubject).then(x => console.log(x));
-consolidate().then(console.log);
+// consolidate().then(console.log);
+// console.log(consolidate());
+consolidate()
 
