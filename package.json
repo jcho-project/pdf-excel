@@ -19,6 +19,6 @@
   "dependencies": {
     "file-system": "^2.2.2",
     "pdfreader": "^1.0.4",
-    "xlsx": "^0.15.1"
+    "xlsx": "^0.17.0"
   }
 }
